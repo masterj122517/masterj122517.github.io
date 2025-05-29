@@ -32,9 +32,10 @@ async function loadPosts() {
 
     for (const file of postFiles) {
         try {
-            console.log(`Fetching ${file}...`);
-            const response = await fetch(file);
-            console.log('Full URL:', file);
+            const fullPath = basePath ? `${basePath}/${file}` : file;
+            console.log(`Fetching ${fullPath}...`);
+            const response = await fetch(fullPath);
+            console.log('Full URL:', fullPath);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -55,7 +56,7 @@ async function loadPosts() {
                     <ul>
                         <li>Current hostname: ${window.location.hostname}</li>
                         <li>Base path: ${basePath}</li>
-                        <li>Full URL: ${file}</li>
+                        <li>Full URL: ${fullPath}</li>
                     </ul>
                 </article>
             `;
