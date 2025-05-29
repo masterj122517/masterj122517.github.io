@@ -9,6 +9,12 @@ if (!marked) {
 
 // 获取基础路径
 function getBasePath() {
+    // 获取当前页面的路径
+    const path = window.location.pathname;
+    // 如果是 GitHub Pages 项目页面，需要添加项目名
+    if (path.includes('/masterj122517.github.io/')) {
+        return '/masterj122517.github.io';
+    }
     return '';
 }
 
