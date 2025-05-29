@@ -9,7 +9,14 @@ if (!marked) {
 
 // 获取基础路径
 function getBasePath() {
-    // 在 GitHub Pages 上，仓库名就是域名，不需要额外的基础路径
+    // 获取当前页面的完整URL
+    const url = window.location.href;
+    // 如果是GitHub Pages，使用仓库名作为基础路径
+    if (url.includes('github.io')) {
+        const pathParts = url.split('/');
+        const repoName = pathParts[3]; // 获取仓库名
+        return '/' + repoName;
+    }
     return '';
 }
 
@@ -28,8 +35,9 @@ async function loadPosts() {
     for (const file of postFiles) {
         try {
             console.log(`Fetching ${file}...`);
-            const response = await fetch(file);
-            console.log('Full URL:', file);
+            const fullPath = basePath + '/' + file;
+            console.log('Full URL:', fullPath);
+            const response = await fetch(fullPath);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -50,7 +58,7 @@ async function loadPosts() {
                     <ul>
                         <li>Current hostname: ${window.location.hostname}</li>
                         <li>Base path: ${basePath}</li>
-                        <li>Full URL: ${file}</li>
+                        <li>Full URL: ${fullPath}</li>
                     </ul>
                 </article>
             `;
