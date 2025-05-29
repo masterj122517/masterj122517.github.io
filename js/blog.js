@@ -7,6 +7,15 @@ if (!marked) {
     document.querySelector('.post-grid').innerHTML = '<p>Error: Markdown parser not loaded</p>';
 }
 
+// 获取基础路径
+function getBasePath() {
+    // 如果是 GitHub Pages，使用仓库名作为基础路径
+    if (window.location.hostname === 'masterj122517.github.io') {
+        return '/masterj122517.github.io';
+    }
+    return '';
+}
+
 // 获取所有博客文章
 async function loadPosts() {
     console.log('Loading posts...');
@@ -16,10 +25,14 @@ async function loadPosts() {
         'posts/neovim-config.md'
     ];
 
+    const basePath = getBasePath();
+    console.log('Base path:', basePath);
+
     for (const file of postFiles) {
         try {
             console.log(`Fetching ${file}...`);
-            const response = await fetch(file);
+            const response = await fetch(`${basePath}/${file}`);
+            console.log('Full URL:', `${basePath}/${file}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -36,6 +49,12 @@ async function loadPosts() {
                     <h3>Error Loading Post</h3>
                     <p>Failed to load: ${file}</p>
                     <p>Error: ${error.message}</p>
+                    <p>Debug info:</p>
+                    <ul>
+                        <li>Current hostname: ${window.location.hostname}</li>
+                        <li>Base path: ${basePath}</li>
+                        <li>Full URL: ${basePath}/${file}</li>
+                    </ul>
                 </article>
             `;
         }
