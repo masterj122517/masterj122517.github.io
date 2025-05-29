@@ -8,11 +8,7 @@ function getUrlParameter(name) {
 
 // 获取基础路径
 function getBasePath() {
-    // 如果是 GitHub Pages，使用仓库名作为基础路径
-    if (window.location.hostname === 'masterj122517.github.io') {
-        return '/masterj122517.github.io';
-    }
-    return '';
+    return ''; // 部署在根目录，basePath 就是空
 }
 
 // 加载文章内容
@@ -28,7 +24,7 @@ async function loadPost() {
         console.log('正在加载文章:', postFile);
         const basePath = getBasePath();
         console.log('基础路径:', basePath);
-        const response = await fetch(`${basePath}/posts/${postFile}`);
+        const response = await fetch(`/posts/${postFile}`);
         console.log('完整URL:', `${basePath}/posts/${postFile}`);
         console.log('响应状态:', response.status);
         

@@ -9,14 +9,7 @@ if (!marked) {
 
 // 获取基础路径
 function getBasePath() {
-    // 获取当前页面的完整URL
-    const url = window.location.href;
-    // 如果是GitHub Pages，使用仓库名作为基础路径
-    if (url.includes('github.io')) {
-        const pathParts = url.split('/');
-        const repoName = pathParts[3]; // 获取仓库名
-        return '/' + repoName;
-    }
+    // 在 GitHub Pages 上，仓库名就是域名，不需要额外的基础路径
     return '';
 }
 
@@ -35,10 +28,8 @@ async function loadPosts() {
     for (const file of postFiles) {
         try {
             console.log(`Fetching ${file}...`);
-            // 使用完整的GitHub Pages URL
-            const fullPath = window.location.origin + basePath + '/' + file;
-            console.log('Full URL:', fullPath);
-            const response = await fetch(fullPath);
+            const response = await fetch(file);
+            console.log('Full URL:', file);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -59,7 +50,7 @@ async function loadPosts() {
                     <ul>
                         <li>Current hostname: ${window.location.hostname}</li>
                         <li>Base path: ${basePath}</li>
-                        <li>Full URL: ${fullPath}</li>
+                        <li>Full URL: ${file}</li>
                     </ul>
                 </article>
             `;
@@ -156,7 +147,7 @@ function renderPosts(posts) {
             <div class="post-preview">
                 ${getPostPreview(post.content)}
             </div>
-            <a href="${window.location.origin}${basePath}/post.html?post=${post.fileName}" class="read-more">阅读更多</a>
+            <a href="${basePath}/post.html?post=${post.fileName}" class="read-more">阅读更多</a>
         `;
         postGrid.appendChild(article);
     });
