@@ -23,8 +23,8 @@ async function loadPosts() {
     console.log('Loading posts...');
     const posts = [];
     const postFiles = [
-        'posts/hello-world.md',
-        'posts/neovim-config.md'
+        'posts/My-First-blog_post.md',
+        'posts/neovim_journey.md'
     ];
 
     for (const file of postFiles) {
