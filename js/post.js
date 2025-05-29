@@ -8,7 +8,7 @@ function getUrlParameter(name) {
 
 // 获取基础路径
 function getBasePath() {
-    return '/masterj122517.github.io';
+    return '';
 }
 
 // 加载文章内容

@@ -9,7 +9,7 @@ if (!marked) {
 
 // 获取基础路径
 function getBasePath() {
-    return '/masterj122517.github.io';
+    return '';
 }
 
 // 获取所有博客文章
@@ -17,8 +17,8 @@ async function loadPosts() {
     console.log('Loading posts...');
     const posts = [];
     const postFiles = [
-        'posts/hello-world.md',
-        'posts/neovim-config.md'
+        '/posts/hello-world.md',
+        '/posts/neovim-config.md'
     ];
 
     const basePath = getBasePath();
