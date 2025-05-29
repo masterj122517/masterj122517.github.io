@@ -25,8 +25,9 @@ async function loadPosts() {
     console.log('Base path:', basePath);
 
     for (const file of postFiles) {
+        let fullPath = '';
         try {
-            const fullPath = basePath ? `${basePath}/${file}` : file;
+            fullPath = basePath ? `${basePath}${file}` : file;
             console.log(`Fetching ${fullPath}...`);
             const response = await fetch(fullPath);
             console.log('Full URL:', fullPath);
