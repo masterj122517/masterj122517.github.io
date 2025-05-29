@@ -35,8 +35,8 @@ async function loadPosts() {
     for (const file of postFiles) {
         try {
             console.log(`Fetching ${file}...`);
-            // 使用相对路径
-            const fullPath = file;
+            // 使用完整的GitHub Pages URL
+            const fullPath = window.location.origin + basePath + '/' + file;
             console.log('Full URL:', fullPath);
             const response = await fetch(fullPath);
             if (!response.ok) {
@@ -156,7 +156,7 @@ function renderPosts(posts) {
             <div class="post-preview">
                 ${getPostPreview(post.content)}
             </div>
-            <a href="${basePath ? `${basePath}/post.html` : 'post.html'}?post=${post.fileName}" class="read-more">阅读更多</a>
+            <a href="${window.location.origin}${basePath}/post.html?post=${post.fileName}" class="read-more">阅读更多</a>
         `;
         postGrid.appendChild(article);
     });
