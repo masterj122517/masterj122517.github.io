@@ -35,7 +35,8 @@ async function loadPosts() {
     for (const file of postFiles) {
         try {
             console.log(`Fetching ${file}...`);
-            const fullPath = basePath ? `${basePath}/${file}` : file;
+            // 使用相对路径
+            const fullPath = file;
             console.log('Full URL:', fullPath);
             const response = await fetch(fullPath);
             if (!response.ok) {
