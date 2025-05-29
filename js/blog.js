@@ -17,27 +17,32 @@ async function loadPosts() {
     console.log('Loading posts...');
     const posts = [];
     const postFiles = [
-        '/posts/hello-world.md',
-        '/posts/neovim-config.md'
+        'posts/hello-world.md',
+        'posts/neovim-config.md'
     ];
-
-    const basePath = getBasePath();
-    console.log('Base path:', basePath);
 
     for (const file of postFiles) {
         let fullPath = '';
         try {
-            fullPath = basePath ? `${basePath}${file}` : file;
+            // 使用相对路径
+            fullPath = file;
             console.log(`Fetching ${fullPath}...`);
-            const response = await fetch(fullPath);
-            console.log('Full URL:', fullPath);
+            
+            // 使用fetch API获取文件内容
+            const response = await fetch(fullPath, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/plain'
+                }
+            });
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
             const text = await response.text();
             console.log(`Successfully loaded ${file}`);
             const post = parseMarkdownPost(text);
-            // 添加文件名到文章数据中
             post.fileName = file.split('/').pop();
             posts.push(post);
         } catch (error) {
@@ -50,8 +55,8 @@ async function loadPosts() {
                     <p>Debug info:</p>
                     <ul>
                         <li>Current hostname: ${window.location.hostname}</li>
-                        <li>Base path: ${basePath}</li>
                         <li>Full URL: ${fullPath}</li>
+                        <li>Error details: ${error.stack || error.message}</li>
                     </ul>
                 </article>
             `;
