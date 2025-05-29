@@ -9,13 +9,7 @@ if (!marked) {
 
 // 获取基础路径
 function getBasePath() {
-    // 在 GitHub Pages 上，仓库名就是域名的一部分
-    const repoName = 'masterj122517.github.io';
-    const path = window.location.pathname;
-    if (path.includes(repoName)) {
-        return '/' + repoName;
-    }
-    return '';
+    return '/masterj122517.github.io';
 }
 
 // 获取所有博客文章
