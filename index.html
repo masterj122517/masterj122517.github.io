@@ -1,28 +1,56 @@
 <!DOCTYPE html>
-<html lang = "en">
-
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterJ's portfolio</title>
+    <title>MasterJ's LostLand</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <h1>WELCOME TO MY WONDERLAND</h1>
-    <p style = "font-size: 20px;">Hello, My Name is MasterJ <br></p>
-    <p>I'm a student in harbin university of science and technology</p>
-    <p>here is my Github <a href="https://github.com/masterj122517" target="_blank" >masterj122517</a></p>
-    <p>Personally, I'am a great Neovim enthusiast and A big fan of GNU/LINUX though im using mac now</p>
-    <p>Right Now, Im trying to learn os and computer networking meanwhile trying to learn to write a website</p>
-    <p>I like the word <b>passion</b> It makes me feel alive</p>
-    <p>Since I am a C/C++ programmer, I know nothing about Web Dev, So I'll try my best to make this website looks nice</p>
-    <p>BTW, i feel like learnig web dev is way easier than learn C/C++, It's kinda fun not going to lie</p>
-    <p>But I don't have much ideas of web dev, I guess the most important is creativity</p>
-    <p>I guess that's it, Maybe I'll use js and js framework to enhance this website</p>
-    <p><i>i don't know :/</i></p>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="avatar-container">
+                    <img src="/img/headpost.png" alt="MasterJ's Avatar" class="avatar">
+                </div>
+                <div class="header-text">
+                    <h1 class="site-title">MasterJ's LostLand</h1>
+                    <p class="site-motto">Life is a fucking Movie</p>
+                </div>
+            </div>
+        </div>
+    </header>
 
-  </body>
+    <main class="site-content">
+        <div class="container">
+            <section class="about-me">
+                <h2>About Me</h2>
+                <p>Hello, I'm MasterJ</p>
+                <p>I'm a student at Harbin University of Science and Technology</p>
+                <p>I'm a passionate C/C++ programmer and a great Neovim enthusiast</p>
+                <p>Currently learning OS and Computer Networking</p>
+                <p>Check out my <a href="https://github.com/masterj122517" target="_blank">GitHub</a></p>
+            </section>
 
+            <section class="blog-posts">
+                <h2>Latest Posts</h2>
+                <div class="post-grid">
+                    <!-- 博客文章将通过 JavaScript 动态加载 -->
+                    <p>Loading posts...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 MasterJ's LostLand. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/blog.js"></script>
+</body>
 </html>
 

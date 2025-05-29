@@ -1,15 +1,304 @@
+:root {
+    --primary-color: #E69875;
+    --bg-color: #272E32;
+    --text-color: #FFF;
+    --container-width: 800px;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --avatar-size: 120px;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #272E32;
-    
 }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Source Code Pro', monospace;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* Header Styles */
+.site-header {
+    padding: 40px 0;
+    text-align: center;
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.avatar-container {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.avatar {
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+}
+
+.header-text {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.site-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.site-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.site-motto {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    font-style: italic;
+}
+
+/* Main Content Styles */
+.site-content {
+    padding: 40px 0;
+}
+
+section {
+    margin-bottom: 60px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+
+.about-me p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+/* Blog Posts Styles */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.post-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+}
+
+.post-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.post-meta {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.post-date {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background: rgba(230, 152, 117, 0.2);
+    color: var(--primary-color);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.post-preview {
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.read-more {
+    display: inline-block;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease;
+}
+
+.read-more:hover {
+    opacity: 0.8;
+}
+
+/* Post Content Styles */
+.post-content {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.post-header {
+    margin-bottom: 30px;
+}
+
+.post-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* Markdown Content Styles */
+.markdown-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+    margin: 1.5em 0 0.8em;
+    color: var(--primary-color);
+}
+
+.markdown-content p {
+    margin-bottom: 1.2em;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+.markdown-content code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.markdown-content pre {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1em;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 1em 0;
+}
+
+.markdown-content pre code {
+    background: none;
+    padding: 0;
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* Footer */
+.site-footer {
+    padding: 30px 0;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .avatar-container {
+        position: static;
+        transform: none;
+        margin-bottom: 20px;
+    }
+
+    .header-text {
+        text-align: center;
+    }
+
+    .site-title {
+        font-size: 2rem;
+    }
+    
+    .post-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .markdown-content {
+        font-size: 1rem;
+    }
+
+    .post-content {
+        padding: 20px;
+    }
+
+    .post-header h1 {
+        font-size: 2rem;
+    }
+
+    .avatar {
+        width: calc(var(--avatar-size) * 0.8);
+        height: calc(var(--avatar-size) * 0.8);
+    }
+}
+
+/* Font Faces */
 @font-face {
-  font-family: "Source Code Pro"
-  src: url('fonts/SourceCodePro-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Source Code Pro";
+    src: url('fonts/SourceCodePro-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
 }
 
 @font-face {
@@ -17,10 +306,6 @@
     src: url('fonts/SourceCodePro-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-}
-@font-face {
-
-
 }
 
 h1 {
@@ -36,11 +321,4 @@ p {
   margin: 0 auto;
   font-size: 20px;
   font-family: 'Source Code Pro', monospace;
-}
-a {
-  color: #E69875;
-
-}
-body {
-  color: #FFF
 }
