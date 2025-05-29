@@ -6,6 +6,15 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
+// 获取基础路径
+function getBasePath() {
+    // 如果是 GitHub Pages，使用仓库名作为基础路径
+    if (window.location.hostname === 'masterj122517.github.io') {
+        return '/masterj122517.github.io';
+    }
+    return '';
+}
+
 // 加载文章内容
 async function loadPost() {
     const postFile = getUrlParameter('post');
@@ -15,17 +24,37 @@ async function loadPost() {
     }
 
     try {
-        const response = await fetch(`posts/${postFile}`);
+        // 添加调试信息
+        console.log('正在加载文章:', postFile);
+        const basePath = getBasePath();
+        console.log('基础路径:', basePath);
+        const response = await fetch(`${basePath}/posts/${postFile}`);
+        console.log('完整URL:', `${basePath}/posts/${postFile}`);
+        console.log('响应状态:', response.status);
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const text = await response.text();
+        console.log('成功加载文章内容');
         const post = parseMarkdownPost(text);
         renderPost(post);
     } catch (error) {
         console.error('Error loading post:', error);
         document.getElementById('post-body').innerHTML = `
             <p>加载文章时出错：${error.message}</p>
+            <p>请检查：</p>
+            <ul>
+                <li>文章文件是否存在</li>
+                <li>文件名是否正确</li>
+                <li>文件权限是否正确</li>
+            </ul>
+            <p>调试信息：</p>
+            <ul>
+                <li>当前域名：${window.location.hostname}</li>
+                <li>基础路径：${getBasePath()}</li>
+                <li>完整URL：${getBasePath()}/posts/${postFile}</li>
+            </ul>
         `;
     }
 }
