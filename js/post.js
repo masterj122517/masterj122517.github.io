@@ -21,42 +21,42 @@ function getBasePath() {
 async function loadPost() {
     const postFile = getUrlParameter('post');
     if (!postFile) {
-        document.getElementById('post-body').innerHTML = '<p>未找到文章</p>';
+        document.getElementById('post-body').innerHTML = '<p>Post not found</p>';
         return;
     }
 
     try {
         // 添加调试信息
-        console.log('正在加载文章:', postFile);
+        console.log('Loading post:', postFile);
         const basePath = getBasePath();
-        console.log('基础路径:', basePath);
+        console.log('Base path:', basePath);
         const fullPath = basePath ? `${basePath}/posts/${postFile}` : `posts/${postFile}`;
-        console.log('完整URL:', fullPath);
+        console.log('Full URL:', fullPath);
         const response = await fetch(fullPath);
-        console.log('响应状态:', response.status);
+        console.log('Response status:', response.status);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const text = await response.text();
-        console.log('成功加载文章内容');
+        console.log('Successfully loaded post content');
         const post = parseMarkdownPost(text);
         renderPost(post);
     } catch (error) {
         console.error('Error loading post:', error);
         document.getElementById('post-body').innerHTML = `
-            <p>加载文章时出错：${error.message}</p>
-            <p>请检查：</p>
+            <p>Error loading post: ${error.message}</p>
+            <p>Please check:</p>
             <ul>
-                <li>文章文件是否存在</li>
-                <li>文件名是否正确</li>
-                <li>文件权限是否正确</li>
+                <li>If the post file exists</li>
+                <li>If the filename is correct</li>
+                <li>If the file permissions are correct</li>
             </ul>
-            <p>调试信息：</p>
+            <p>Debug info:</p>
             <ul>
-                <li>当前域名：${window.location.hostname}</li>
-                <li>基础路径：${getBasePath()}</li>
-                <li>完整URL：${getBasePath()}/posts/${postFile}</li>
+                <li>Current hostname: ${window.location.hostname}</li>
+                <li>Base path: ${getBasePath()}</li>
+                <li>Full URL: ${getBasePath()}/posts/${postFile}</li>
             </ul>
         `;
     }

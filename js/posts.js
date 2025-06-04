@@ -9,9 +9,7 @@ if (!marked) {
 
 // 获取基础路径
 function getBasePath() {
-    // 获取当前页面的路径
     const path = window.location.pathname;
-    // 如果是 GitHub Pages 项目页面，需要添加项目名
     if (path.includes('/masterj122517.github.io/')) {
         return '/masterj122517.github.io';
     }
@@ -23,21 +21,16 @@ async function loadPosts() {
     console.log('Loading posts...');
     const posts = [];
     const postFiles = [
+        'posts/hacking.md',
         'posts/neovim_journey.md',
         'posts/remaps.md',
         'posts/dream.md',
-        'posts/hacking.md',
     ];
 
     for (const file of postFiles) {
-        let fullPath = '';
         try {
-            // 使用相对路径
-            fullPath = file;
-            console.log(`Fetching ${fullPath}...`);
-            
-            // 使用fetch API获取文件内容
-            const response = await fetch(fullPath, {
+            console.log(`Fetching ${file}...`);
+            const response = await fetch(file, {
                 method: 'GET',
                 headers: {
                     'Accept': 'text/plain'
@@ -55,19 +48,6 @@ async function loadPosts() {
             posts.push(post);
         } catch (error) {
             console.error(`Error loading post ${file}:`, error);
-            document.querySelector('.post-grid').innerHTML += `
-                <article class="post-card error">
-                    <h3>Error Loading Post</h3>
-                    <p>Failed to load: ${file}</p>
-                    <p>Error: ${error.message}</p>
-                    <p>Debug info:</p>
-                    <ul>
-                        <li>Current hostname: ${window.location.hostname}</li>
-                        <li>Full URL: ${fullPath}</li>
-                        <li>Error details: ${error.stack || error.message}</li>
-                    </ul>
-                </article>
-            `;
         }
     }
 
@@ -79,12 +59,10 @@ async function loadPosts() {
 
 // 解析 Markdown 文章的前置元数据
 function parseMarkdownPost(text) {
-    console.log('Parsing post...');
     const frontMatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
     const match = text.match(frontMatterRegex);
 
     if (!match) {
-        console.warn('No front matter found in post');
         return {
             title: 'Untitled',
             date: new Date().toISOString(),
@@ -105,7 +83,6 @@ function parseMarkdownPost(text) {
                 try {
                     metadata[key] = JSON.parse(value);
                 } catch (e) {
-                    console.warn('Error parsing tags:', e);
                     metadata[key] = [];
                 }
             } else {
@@ -114,25 +91,67 @@ function parseMarkdownPost(text) {
         }
     });
 
-    const post = {
+    return {
         ...metadata,
         content: marked.parse(content)
     };
-    console.log('Post parsed:', post);
-    return post;
 }
 
 // 获取文章预览
 function getPostPreview(content) {
-    // 移除HTML标签
     const plainText = content.replace(/<[^>]*>/g, '');
-    // 获取前200个字符
     return plainText.substring(0, 200) + '...';
+}
+
+// 渲染标签过滤器
+function renderTagFilters(posts) {
+    const tagFilters = document.getElementById('tag-filters');
+    const allTags = new Set();
+    
+    // 收集所有标签
+    posts.forEach(post => {
+        post.tags.forEach(tag => allTags.add(tag));
+    });
+
+    // 创建标签按钮
+    const tagButtons = Array.from(allTags).map(tag => `
+        <button class="tag-filter" data-tag="${tag}">
+            ${tag}
+        </button>
+    `).join('');
+
+    tagFilters.innerHTML = tagButtons;
+
+    // 添加标签点击事件
+    document.querySelectorAll('.tag-filter').forEach(button => {
+        button.addEventListener('click', () => {
+            button.classList.toggle('active');
+            filterPosts();
+        });
+    });
+}
+
+// 过滤文章
+function filterPosts() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const activeTags = Array.from(document.querySelectorAll('.tag-filter.active'))
+        .map(button => button.dataset.tag);
+
+    const filteredPosts = window.allPosts.filter(post => {
+        const matchesSearch = post.title.toLowerCase().includes(searchTerm) ||
+                            post.content.toLowerCase().includes(searchTerm);
+        
+        const matchesTags = activeTags.length === 0 ||
+                          activeTags.every(tag => post.tags.includes(tag));
+
+        return matchesSearch && matchesTags;
+    });
+
+    renderPosts(filteredPosts);
 }
 
 // 渲染博客文章列表
 function renderPosts(posts) {
-    console.log('Rendering posts...');
     const postGrid = document.querySelector('.post-grid');
     if (!postGrid) {
         console.error('Post grid element not found!');
@@ -147,10 +166,7 @@ function renderPosts(posts) {
     const basePath = getBasePath();
     postGrid.innerHTML = '';
 
-    // 只显示最新的3篇文章
-    const latestPosts = posts.slice(0, 4);
-
-    latestPosts.forEach(post => {
+    posts.forEach(post => {
         const article = document.createElement('article');
         article.className = 'post-card';
         article.innerHTML = `
@@ -168,21 +184,24 @@ function renderPosts(posts) {
         `;
         postGrid.appendChild(article);
     });
-    console.log('Posts rendered');
 }
 
 // 初始化
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM loaded, initializing...');
     try {
         const posts = await loadPosts();
+        window.allPosts = posts; // 存储所有文章供过滤使用
+        renderTagFilters(posts);
         renderPosts(posts);
+
+        // 添加搜索功能
+        document.getElementById('search-input').addEventListener('input', filterPosts);
     } catch (error) {
-        console.error('Error initializing blog:', error);
+        console.error('Error initializing posts page:', error);
         document.querySelector('.post-grid').innerHTML = `
             <article class="post-card error">
                 <h3>Error</h3>
-                <p>Failed to initialize blog: ${error.message}</p>
+                <p>Failed to initialize posts page: ${error.message}</p>
             </article>
         `;
     }
