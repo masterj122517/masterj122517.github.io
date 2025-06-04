@@ -24,7 +24,6 @@ async function loadPosts() {
     const posts = [];
     const postFiles = [
         'posts/neovim_journey.md',
-        'posts/My-First-blog_post.md',
         'posts/remaps.md',
         'posts/dream.md',
         'posts/hacking.md',
