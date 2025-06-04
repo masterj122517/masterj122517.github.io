@@ -27,6 +27,7 @@ async function loadPosts() {
         'posts/My-First-blog_post.md',
         'posts/remaps.md',
         'posts/dream.md',
+        'posts/hacking.md',
     ];
 
     for (const file of postFiles) {
