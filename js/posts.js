@@ -25,6 +25,7 @@ async function loadPosts() {
         'posts/neovim_journey.md',
         'posts/remaps.md',
         'posts/dream.md',
+        'posts/masterjs_tenet.md',
     ];
 
     for (const file of postFiles) {
