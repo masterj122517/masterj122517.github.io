@@ -43,3 +43,12 @@ almost all my friends(including developer friends) use Windows, i'm sort of a Ga
 And.......
 Configure emacs and neovim is really fun..........
 
+Here is the plan, I will use doom emacs for like half a year with of course my additional config 
+
+Just Like the way i use LazyVim for a year and made my own config.
+
+I will use this awesome and fast config template or "emacs distribution" to get use to emacs's behavior and learn elisp meanwhile 
+
+According to lazycat, the best way to learn emacs is read the elisp reference manual entirely. 
+
+It's a wonder journey, can't wait to use it to code and make some fun.
