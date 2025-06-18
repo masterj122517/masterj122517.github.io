@@ -27,6 +27,8 @@ async function loadPosts() {
         'posts/dream.md',
         'posts/masterjs_tenet.md',
         'posts/learn_rust.md',
+        'posts/learn_emacs.md',
+        'posts/emacs.md',
     ];
 
     for (const file of postFiles) {
