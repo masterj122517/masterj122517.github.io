@@ -56,6 +56,6 @@ Therefore, I conclude the 3 i must follow
 
 ***Boredom and drudgery are evil.***
 
-***the happiness and pain are because my Ideology struggling against the world, I must follow my Ideology***
+***the happiness and pain are because my heart struggling against the world, I must follow my heart***
 
 ***Helping Others in your way is good***
