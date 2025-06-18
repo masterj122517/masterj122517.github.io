@@ -9,15 +9,15 @@ I want to be a guy like him(even he said don't try to be like him, try to be hap
 
 I find the modern zen poem which finds me a great path to learn or to find out which path I am trying to take
 
-*To follow the path*  
+*To follow the path*    
 
-*look to the master*  
+*look to the master*
 
-*follow to the mast*er  
+*follow to the master*  
 
-*walk with the mast*er  
+*walk with the master*  
 
-*see through the ma*ster  
+*see through the master*  
 
 *become the master*  
 
@@ -55,14 +55,14 @@ I might not end up of being a great programmer, but i really want to be someone 
 
 Remember the Modern Zen Poem
 
-*To follow the path*  
+*To follow the path*    
 
-*look to the master*  
+*look to the master*
 
-*follow to the mast*e   
+*follow to the master*  
 
-*walk with the mast*er  
+*walk with the master*  
 
-*see through the ma*ster  
+*see through the master*  
 
 *become the master*  
