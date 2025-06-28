@@ -2,4 +2,3 @@
 
 
 So, I decided to rewrite my blog myself, without using hexo or something like that
-

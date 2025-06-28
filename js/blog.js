@@ -31,6 +31,7 @@ async function loadPosts() {
         'posts/learn_rust.md',
         'posts/learn_emacs.md',
         'posts/emacs.md',
+        'posts/meditation.md',
     ];
 
     for (const file of postFiles) {
@@ -39,7 +40,7 @@ async function loadPosts() {
             // 使用相对路径
             fullPath = file;
             console.log(`Fetching ${fullPath}...`);
-            
+
             // 使用fetch API获取文件内容
             const response = await fetch(fullPath, {
                 method: 'GET',
@@ -47,11 +48,11 @@ async function loadPosts() {
                     'Accept': 'text/plain'
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const text = await response.text();
             console.log(`Successfully loaded ${file}`);
             const post = parseMarkdownPost(text);
@@ -190,4 +191,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             </article>
         `;
     }
-}); 
+});

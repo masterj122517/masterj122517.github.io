@@ -29,6 +29,7 @@ async function loadPosts() {
         'posts/learn_rust.md',
         'posts/learn_emacs.md',
         'posts/emacs.md',
+        'posts/meditation.md',
     ];
 
     for (const file of postFiles) {
@@ -40,11 +41,11 @@ async function loadPosts() {
                     'Accept': 'text/plain'
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const text = await response.text();
             console.log(`Successfully loaded ${file}`);
             const post = parseMarkdownPost(text);
@@ -111,7 +112,7 @@ function getPostPreview(content) {
 function renderTagFilters(posts) {
     const tagFilters = document.getElementById('tag-filters');
     const allTags = new Set();
-    
+
     // 收集所有标签
     posts.forEach(post => {
         post.tags.forEach(tag => allTags.add(tag));
@@ -144,7 +145,7 @@ function filterPosts() {
     const filteredPosts = window.allPosts.filter(post => {
         const matchesSearch = post.title.toLowerCase().includes(searchTerm) ||
                             post.content.toLowerCase().includes(searchTerm);
-        
+
         const matchesTags = activeTags.length === 0 ||
                           activeTags.every(tag => post.tags.includes(tag));
 
@@ -209,4 +210,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             </article>
         `;
     }
-}); 
+});
