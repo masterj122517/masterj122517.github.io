@@ -1,10 +1,10 @@
 ---
-title: Learn Emacs 
+title: Learn Emacs
 date: 2025-06-17
 tags: [emacs, productivity]
 ---
 
-# I been using neovim for many years 
+# I been using neovim for many years
 
 I like vim motions i set my browser to behave like vim and even bind vim hjkl to macOS with karabiner-elements.
 
@@ -12,29 +12,29 @@ But Now, I use emacs.....
 
 Let me explain....
 
-I like neovim, i use it for almost five years and it's indeed my favorite code editor but i'm trying to build a unique coding experience. 
+I like neovim, i use it for almost five years and it's indeed my favorite code editor but i'm trying to build a unique coding experience.
 
 No matter what OS im in, i could always start a code editor and start coding.
 
-right right right, I know i could just use vscode on windows.  
+right right right, I know i could just use vscode on windows.
 
 Vscode is cool, but lack of extensibility I like to use my *own* editor just like neovim.
 
-As a code editor, neovim is top1 of course. 
+As a code editor, neovim is top1 of course.
 
 But as a filemanager, terminal emulator, pdf reader, email client, rss feed reader, It's not that good.
 
 Therefore, in case i will use different OS like Windows, Linux, macOS, I want to build a consistent experience among all those OS.
 
-I used neovim in windows, not gonna lie, it's pretty bad experience. 
+I used neovim in windows, not gonna lie, it's pretty bad experience.
 
-I like the idea of using one tool for everything. like raycast in macOS 
+I like the idea of using one tool for everything. like raycast in macOS
 
-I don't want to use different filemanager, pdf reader, email client on different platforms, it's really not my way of doing things 
+I don't want to use different filemanager, pdf reader, email client on different platforms, it's really not my way of doing things
 
 So, although i like tmux and sesh(which is a tmux tools), i decided to switch to a gui application which is emacs.
 
-Don't get me wrong, i will still use neovim with tmux in macOS and Linux. 
+Don't get me wrong, i will still use neovim with tmux in macOS and Linux.
 
 All the effort i will be made, it's just i want to build my emacs config like my neovim and tmux experience on linux or macOS.
 
@@ -43,12 +43,23 @@ almost all my friends(including developer friends) use Windows, i'm sort of a Ga
 And.......
 Configure emacs and neovim is really fun..........
 
-Here is the plan, I will use doom emacs for like half a year with of course my additional config 
+Here is the plan, I will use doom emacs for like half a year with of course my additional config
 
 Just Like the way i use LazyVim for a year and made my own config.
 
-I will use this awesome and fast config template or "emacs distribution" to get use to emacs's behavior and learn elisp meanwhile 
+I will use this awesome and fast config template or "emacs distribution" to get use to emacs's behavior and learn elisp meanwhile
 
-According to lazycat, the best way to learn emacs is read the elisp reference manual entirely. 
+According to lazycat, the best way to learn emacs is read the elisp reference manual entirely.
 
 It's a wonder journey, can't wait to use it to code and make some fun.
+
+
+
+Sun Jun 29
+
+Damn, I got so used to lazygit that i barely don't know how to use git without it.
+
+They say magit is a really useful git client(i guess?), I want to use it, but i feel like lazygit is just better and simpler.
+
+ I don't know, let's see, It's kinda fun not going to lie
+ know
