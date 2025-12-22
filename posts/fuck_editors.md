@@ -5,5 +5,3 @@ tags: [Fuck Editors]
 ---
 
 I find my editor and i use it for the rest of my life.
-
-
