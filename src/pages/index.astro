@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MasonryGrid from '../components/MasonryGrid.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts.sort((a: any, b: any) => 
+  b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<BaseLayout title="MasterJ's LostLand - Latest Posts">
+  <div class="pt-24 pb-12">
+    <Header />
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+      <h1 class="text-4xl md:text-5xl font-bold text-text mb-4">
+        Latest Posts
+      </h1>
+      <p class="text-lg text-text-muted mb-12">
+        Thoughts on tech, life, and everything in between.
+      </p>
+      
+      <MasonryGrid posts={posts} />
+    </div>
+    
+    <Footer />
+  </div>
+</BaseLayout>

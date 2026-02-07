@@ -1,0 +1,164 @@
+---
+import MasonryGrid from './MasonryGrid.astro';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  query?: string;
+}
+
+const { query = '' } = Astro.props;
+
+const allPosts = await getCollection('blog');
+
+interface PostData {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  category: string;
+  date: Date;
+  image: string;
+}
+
+const postsData: PostData[] = allPosts.map((post: any) => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  tags: post.data.tags,
+  category: post.data.category,
+  date: post.data.date,
+  image: post.data.image,
+}));
+
+const filteredPosts = query
+  ? allPosts.filter((post: any) => {
+      const lowerQuery = query.toLowerCase();
+      const titleMatch = post.data.title.toLowerCase().includes(lowerQuery);
+      const tagMatch = post.data.tags.some((tag: string) => 
+        tag.toLowerCase().includes(lowerQuery)
+      );
+      const categoryMatch = post.data.category.toLowerCase().includes(lowerQuery);
+      return titleMatch || tagMatch || categoryMatch;
+    })
+  : allPosts;
+---
+
+<div id="search-container">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+    <div class="mb-8">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search by title, tags, or category... (Press Ctrl/Cmd + K)"
+        value={query}
+        class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+        autofocus
+      />
+    </div>
+
+    <div id="search-results">
+      <div id="results-count" class="text-text-muted mb-6">
+        {query
+          ? `${filteredPosts.length} result${filteredPosts.length !== 1 ? 's' : ''} found for "${query}"`
+          : `Showing all ${allPosts.length} posts`
+        }
+      </div>
+
+      {filteredPosts.length > 0 ? (
+        <MasonryGrid posts={filteredPosts} />
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-text-muted text-lg">
+            No posts found matching your search.
+          </p>
+          <p class="text-text-muted text-sm mt-2">
+            Try different keywords or browse all posts.
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+<script>
+  import Fuse from 'fuse.js';
+
+  interface PostData {
+    slug: string;
+    title: string;
+    description: string;
+    tags: string[];
+    category: string;
+    date: Date;
+    image: string;
+  }
+
+  const postsData: PostData[] = [
+    {
+      slug: 'getting-started-with-neovim',
+      title: "Getting Started with Neovim",
+      description: "A comprehensive guide to setting up and configuring Neovim for modern development workflows.",
+      tags: ['Neovim', 'Linux', 'Productivity'],
+      category: 'Tech',
+      date: new Date('2026-02-01'),
+      image: 'https://images.unsplash.com/photo-1626379953822-baec19c3accd?w=600&h=400&fit=crop'
+    },
+    {
+      slug: 'my-rime-input-method-setup',
+      title: "My Rime Input Method Setup",
+      description: "How I configured Rime for efficient Chinese typing with custom schemas and themes.",
+      tags: ['Rime', 'Input Method', 'Setup'],
+      category: 'Tech',
+      date: new Date('2026-01-28'),
+      image: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=600&h=400&fit=crop'
+    },
+    {
+      slug: 'stoicism-in-modern-life',
+      title: "Stoicism in Modern Life",
+      description: "Ancient Stoic philosophy offers practical wisdom for navigating modern challenges and stress.",
+      tags: ['Philosophy', 'Life', 'Stoicism'],
+      category: 'Life',
+      date: new Date('2026-01-25'),
+      image: 'https://images.unsplash.com/photo-1461301214746-1e790926d323?w=600&h=400&fit=crop'
+    }
+  ];
+
+  const fuse = new Fuse(postsData, {
+    keys: ['title', 'tags', 'category', 'description'],
+    threshold: 0.3,
+    includeScore: true,
+  });
+
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const resultsCount = document.getElementById('results-count');
+
+  if (searchInput) {
+    searchInput.focus();
+
+    searchInput.addEventListener('input', (e) => {
+      const query = (e.target as HTMLInputElement).value;
+      
+      if (query.trim() === '') {
+        window.location.href = '/search';
+        return;
+      }
+
+      const results = fuse.search(query);
+      const postSlugs = results.map((result) => result.item.slug);
+      
+      resultsCount!.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} found for "${query}"`;
+
+      const cards = document.querySelectorAll('#search-results article');
+      cards.forEach((card) => {
+        const link = card.querySelector('a') as HTMLAnchorElement;
+        const slug = link?.href.split('/blog/')[1];
+        
+        if (postSlugs.includes(slug)) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  }
+</script>

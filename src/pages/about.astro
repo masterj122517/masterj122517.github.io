@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="About">
+  <div class="pt-24">
+    <Header />
+    
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-text mb-8">
+        About
+      </h1>
+      
+      <div class="prose prose-invert max-w-none">
+        <p>
+          Welcome to my personal blog! I'm a developer who loves exploring new technologies, 
+          sharing knowledge, and documenting my journey in tech and life.
+        </p>
+        
+        <p>
+          This blog is where I write about:
+        </p>
+        
+        <ul>
+          <li>Development tools and workflows</li>
+          <li>Personal experiences and lessons learned</li>
+          <li>Tech tutorials and tips</li>
+          <li>Philosophy and life insights</li>
+        </ul>
+        
+        <p>
+          I built this blog using Astro, a modern web framework that prioritizes performance and 
+          developer experience. The design is inspired by minimal, content-focused blogs that 
+          prioritize readability over bells and whistles.
+        </p>
+        
+        <p>
+          Feel free to browse through the posts, and if you'd like to connect, you can find me on 
+          GitHub and Twitter.
+        </p>
+      </div>
+    </article>
+    
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .prose {
+    color: var(--color-text);
+    max-width: 100%;
+    line-height: 1.75;
+  }
+  
+  .prose p {
+    margin-bottom: 1.25rem;
+  }
+  
+  .prose ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+</style>

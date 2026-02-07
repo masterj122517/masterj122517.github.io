@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Search from '../components/Search.astro';
+
+const query = Astro.url.searchParams.get('q') || '';
+---
+
+<BaseLayout title={`Search${query ? `: ${query}` : ''} - MasterJ's LostLand`}>
+  <div class="pt-24 pb-12">
+    <Header />
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-text mb-4">
+        Search
+      </h1>
+      <p class="text-lg text-text-muted mb-12">
+        Search posts by title, tags, or category.
+      </p>
+      
+      <Search query={query} />
+    </div>
+    
+    <Footer />
+  </div>
+</BaseLayout>

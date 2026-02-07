@@ -1,0 +1,164 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import MasonryGrid from '../../components/MasonryGrid.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post }: { post: any } = Astro.props;
+const { Content } = await post.render();
+
+const relatedPosts = (await getCollection('blog'))
+  .filter((p: any) => p.slug !== post.slug)
+  .filter((p: any) => p.data.tags.some((tag: string) => 
+    post.data.tags.includes(tag)
+  ))
+  .slice(0, 3);
+
+const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+---
+
+<BaseLayout title={post.data.title}>
+  <div class="pt-24">
+    <Header />
+    
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <header class="mb-8">
+        <span class="text-accent font-medium">
+          {post.data.category}
+        </span>
+        <h1 class="text-4xl md:text-5xl font-bold text-text mt-2 mb-4">
+          {post.data.title}
+        </h1>
+        <time datetime={post.data.date.toISOString()} class="text-text-muted">
+          {formatDate(post.data.date)}
+        </time>
+        
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-4">
+            {post.data.tags.map((tag: string) => (
+              <a href={`/tags/${tag}`} class="text-sm text-text-muted hover:text-accent transition-colors">
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
+      
+      <div class="prose prose-invert max-w-none">
+        <Content />
+      </div>
+      
+      <div class="mt-12 pt-8 border-t border-border">
+        <a href="/" class="text-accent hover:text-text transition-colors">
+          &larr; Back to all posts
+        </a>
+      </div>
+    </article>
+    
+    {relatedPosts.length > 0 && (
+      <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 class="text-2xl font-bold text-text mb-8">
+          Related Posts
+        </h2>
+        <MasonryGrid posts={relatedPosts} />
+      </section>
+    )}
+    
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .prose {
+    color: var(--color-text);
+    max-width: 100%;
+    line-height: 1.75;
+  }
+  
+  .prose h2 {
+    color: var(--color-text);
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .prose h3 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .prose p {
+    margin-bottom: 1.25rem;
+  }
+  
+  .prose code {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .prose pre {
+    background-color: var(--color-surface);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+  }
+  
+  .prose pre code {
+    background-color: transparent;
+    padding: 0;
+  }
+  
+  .prose ul, .prose ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+  
+  .prose a:hover {
+    color: var(--color-text);
+  }
+  
+  .prose strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  
+  .prose blockquote {
+    border-left: 4px solid var(--color-accent);
+    padding-left: 1rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-bottom: 1.25rem;
+  }
+</style>
