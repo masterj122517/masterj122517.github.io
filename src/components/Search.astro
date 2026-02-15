@@ -1,5 +1,4 @@
 ---
-import MasonryGrid from './MasonryGrid.astro';
 import { getCollection } from 'astro:content';
 
 interface Props {
@@ -10,31 +9,11 @@ const { query = '' } = Astro.props;
 
 const allPosts = await getCollection('blog');
 
-interface PostData {
-  slug: string;
-  title: string;
-  description: string;
-  tags: string[];
-  category: string;
-  date: Date;
-  image: string;
-}
-
-const postsData: PostData[] = allPosts.map((post: any) => ({
-  slug: post.slug,
-  title: post.data.title,
-  description: post.data.description,
-  tags: post.data.tags,
-  category: post.data.category,
-  date: post.data.date,
-  image: post.data.image,
-}));
-
 const filteredPosts = query
-  ? allPosts.filter((post: any) => {
+  ? allPosts.filter((post) => {
       const lowerQuery = query.toLowerCase();
       const titleMatch = post.data.title.toLowerCase().includes(lowerQuery);
-      const tagMatch = post.data.tags.some((tag: string) => 
+      const tagMatch = post.data.tags.some((tag) => 
         tag.toLowerCase().includes(lowerQuery)
       );
       const categoryMatch = post.data.category.toLowerCase().includes(lowerQuery);
@@ -65,7 +44,24 @@ const filteredPosts = query
       </div>
 
       {filteredPosts.length > 0 ? (
-        <MasonryGrid posts={filteredPosts} />
+        <div class="space-y-4 min-h-[200px]">
+          {filteredPosts.map((post) => (
+            <article class="bg-surface rounded-lg p-6 hover:bg-surface-hover transition-colors duration-200 border-b border-border last:border-b-0">
+              <a href={`/blog/${post.slug}`} class="block">
+                <h3 class="text-xl font-bold text-text mb-2 hover:text-accent transition-colors duration-200">{post.data.title}</h3>
+                <p class="text-text-muted mb-3">{post.data.description}</p>
+                <div class="flex items-center justify-between text-sm text-text-muted">
+                  <span>{post.data.date.toLocaleDateString()}</span>
+                  <div class="flex gap-2">
+                    {post.data.tags.map((tag) => (
+                      <span class="px-2 py-1 bg-accent/10 text-accent rounded-full text-xs">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
       ) : (
         <div class="text-center py-16">
           <p class="text-text-muted text-lg">
@@ -81,84 +77,21 @@ const filteredPosts = query
 </div>
 
 <script>
-  import Fuse from 'fuse.js';
-
-  interface PostData {
-    slug: string;
-    title: string;
-    description: string;
-    tags: string[];
-    category: string;
-    date: Date;
-    image: string;
-  }
-
-  const postsData: PostData[] = [
-    {
-      slug: 'getting-started-with-neovim',
-      title: "Getting Started with Neovim",
-      description: "A comprehensive guide to setting up and configuring Neovim for modern development workflows.",
-      tags: ['Neovim', 'Linux', 'Productivity'],
-      category: 'Tech',
-      date: new Date('2026-02-01'),
-      image: 'https://images.unsplash.com/photo-1626379953822-baec19c3accd?w=600&h=400&fit=crop'
-    },
-    {
-      slug: 'my-rime-input-method-setup',
-      title: "My Rime Input Method Setup",
-      description: "How I configured Rime for efficient Chinese typing with custom schemas and themes.",
-      tags: ['Rime', 'Input Method', 'Setup'],
-      category: 'Tech',
-      date: new Date('2026-01-28'),
-      image: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=600&h=400&fit=crop'
-    },
-    {
-      slug: 'stoicism-in-modern-life',
-      title: "Stoicism in Modern Life",
-      description: "Ancient Stoic philosophy offers practical wisdom for navigating modern challenges and stress.",
-      tags: ['Philosophy', 'Life', 'Stoicism'],
-      category: 'Life',
-      date: new Date('2026-01-25'),
-      image: 'https://images.unsplash.com/photo-1461301214746-1e790926d323?w=600&h=400&fit=crop'
-    }
-  ];
-
-  const fuse = new Fuse(postsData, {
-    keys: ['title', 'tags', 'category', 'description'],
-    threshold: 0.3,
-    includeScore: true,
-  });
-
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  const resultsCount = document.getElementById('results-count');
-
+  const searchInput = document.getElementById('search-input');
+  
   if (searchInput) {
     searchInput.focus();
-
+    
     searchInput.addEventListener('input', (e) => {
-      const query = (e.target as HTMLInputElement).value;
+      const target = e.target as HTMLInputElement;
+      if (!target) return;
+      
+      const query = target.value;
       
       if (query.trim() === '') {
         window.location.href = '/search';
         return;
       }
-
-      const results = fuse.search(query);
-      const postSlugs = results.map((result) => result.item.slug);
-      
-      resultsCount!.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} found for "${query}"`;
-
-      const cards = document.querySelectorAll('#search-results article');
-      cards.forEach((card) => {
-        const link = card.querySelector('a') as HTMLAnchorElement;
-        const slug = link?.href.split('/blog/')[1];
-        
-        if (postSlugs.includes(slug)) {
-          (card as HTMLElement).style.display = 'block';
-        } else {
-          (card as HTMLElement).style.display = 'none';
-        }
-      });
     });
   }
 </script>
