@@ -13,32 +13,34 @@ import Footer from '../components/Footer.astro';
         About
       </h1>
       
-      <div class="prose prose-invert max-w-none">
+      <div class="prose max-w-none">
         <p>
-          Welcome to my personal blog! I'm a developer who loves exploring new technologies, 
-          sharing knowledge, and documenting my journey in tech and life.
+          Welcome to my personal blog! My name is MasterJ. I'm here to share my experiences and thoughts.
         </p>
-        
+
         <p>
-          This blog is where I write about:
+          I am a Chinese college student who wants to enter the AI industry. This blog is where I write about:
         </p>
-        
+
         <ul>
-          <li>Development tools and workflows</li>
-          <li>Personal experiences and lessons learned</li>
-          <li>Tech tutorials and tips</li>
-          <li>Philosophy and life insights</li>
+          <li><strong>Development tools and workflows</strong> - Tools that make me more productive</li>
+          <li><strong>Personal experiences and lessons learned</strong> - Sharing my journey</li>
+          <li><strong>Tech tutorials and tips</strong> - Helping others learn</li>
+          <li><strong>Philosophy and life insights</strong> - Thoughts on living well</li>
         </ul>
-        
+
         <p>
-          I built this blog using Astro, a modern web framework that prioritizes performance and 
-          developer experience. The design is inspired by minimal, content-focused blogs that 
-          prioritize readability over bells and whistles.
+          I built this blog using <a href="https://bigmodel.cn/special_area">GLM4.7</a> and <strong>Astro</strong>. 
+          <em>God I Love LLM</em> 😊
         </p>
-        
+
+        <blockquote>
+          "The best way to predict the future is to create it."
+        </blockquote>
+
         <p>
           Feel free to browse through the posts, and if you'd like to connect, you can find me on 
-          GitHub and Twitter.
+          <a href="https://github.com/masterj122517/">GitHub</a> and <a href="https://x.com/MasterJ122517">X (Twitter)</a>.
         </p>
       </div>
     </article>
@@ -51,19 +53,168 @@ import Footer from '../components/Footer.astro';
   .prose {
     color: var(--color-text);
     max-width: 100%;
-    line-height: 1.75;
+    line-height: 1.8;
+    font-size: 1.125rem;
   }
-  
-  .prose p {
-    margin-bottom: 1.25rem;
+
+  .prose h1 {
+    color: var(--color-text);
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
   }
-  
-  .prose ul {
-    padding-left: 1.5rem;
-    margin-bottom: 1.25rem;
+
+  .prose h2 {
+    color: var(--color-text);
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 0.5rem;
   }
-  
-  .prose li {
+
+  .prose h3 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .prose h4 {
+    color: var(--color-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
     margin-bottom: 0.5rem;
+  }
+
+  .prose p {
+    margin-bottom: 1.5rem;
+  }
+
+.prose :global(a) {
+  color: #8b5cf6; 
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3); /* 极细的半透明下划线 */
+  transition: all 0.2s ease-in-out;
+  padding-bottom: 1px;
+}
+
+.prose :global(a:hover) {
+  color: #7c3aed; 
+  border-bottom: 2px solid #7c3aed; /* 下划线加粗变实 */
+  background-color: rgba(139, 92, 246, 0.05); /* 极轻微的背景提亮，几乎察觉不到 */
+}
+
+.prose :global(a:visited) {
+  color: #a78bfa; 
+}
+
+.prose pre :global(a) {
+  border: none;
+}
+  .prose a:active {
+    transform: translateY(0) !important;
+  }
+
+  .prose a:hover {
+    color: #93c5fd;
+  }
+
+  .prose a:visited {
+    color: #c084fc;
+  }
+
+  .prose a:visited:hover {
+    color: #d8b4fe;
+  }
+
+  .prose strong {
+    color: var(--color-text);
+    font-weight: 700;
+    background: linear-gradient(120deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 40%;
+    background-position: 0 88%;
+    padding: 0 0.125rem;
+  }
+
+  .prose em {
+    color: var(--color-text);
+    font-style: italic;
+    color: #d1d5db;
+  }
+
+  .prose strong em,
+  .prose em strong {
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .prose code {
+    background-color: var(--color-surface);
+    color: #f472b6;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    border: 1px solid var(--color-border);
+  }
+
+  .prose ul, .prose ol {
+    padding-left: 1.75rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+  }
+
+  .prose ul {
+    list-style-type: disc;
+  }
+
+  .prose ol {
+    list-style-type: decimal;
+  }
+
+  .prose li {
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+  }
+
+  .prose li::marker {
+    color: var(--color-accent);
+  }
+
+  .prose blockquote {
+    border-left: 4px solid var(--color-accent);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background-color: var(--color-surface);
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: #d1d5db;
+    font-style: italic;
+  }
+
+  .prose blockquote p {
+    margin-bottom: 0;
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 2px solid var(--color-border);
+    margin: 2.5rem 0;
+  }
+
+  .prose sup {
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    vertical-align: super;
+    margin-left: 0.125rem;
   }
 </style>

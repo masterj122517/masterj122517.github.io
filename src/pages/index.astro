@@ -6,7 +6,10 @@ import MasonryGrid from '../components/MasonryGrid.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
-const posts = allPosts.sort((a: any, b: any) => 
+const featuredPosts = allPosts.filter(post => post.data.featured).sort((a: any, b: any) => 
+  b.data.date.valueOf() - a.data.date.valueOf()
+);
+const regularPosts = allPosts.filter(post => !post.data.featured).sort((a: any, b: any) => 
   b.data.date.valueOf() - a.data.date.valueOf()
 );
 ---
@@ -16,14 +19,83 @@ const posts = allPosts.sort((a: any, b: any) =>
     <Header />
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-      <h1 class="text-4xl md:text-5xl font-bold text-text mb-4">
+      {featuredPosts.length > 0 && (
+        <>
+          <h1 class="text-4xl md:text-5xl font-bold text-text mb-4">
+            Featured Posts
+          </h1>
+          <p class="text-lg text-text-muted mb-12">
+            Handpicked articles you shouldn't miss.
+          </p>
+          
+          <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {featuredPosts.map((post) => (
+              <a href={`/blog/${post.slug}`} class="block group">
+                <div class="overflow-hidden rounded-lg bg-surface hover:bg-surface-hover transition-all duration-200 hover:transform hover:-translate-y-1 h-full">
+                  <div class="relative aspect-video overflow-hidden">
+                    <img
+                      src={post.data.image}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <span class="absolute top-3 left-3 px-2 py-1 text-xs font-medium text-white rounded bg-accent">
+                      Featured
+                    </span>
+                  </div>
+                  
+                  <div class="p-4">
+                    <h3 class="text-xl font-semibold text-text mb-2 group-hover:text-accent transition-colors line-clamp-2">
+                      {post.data.title}
+                    </h3>
+                    
+                    <div class="flex items-center gap-3 text-sm text-text-muted mb-3">
+                      <time datetime={post.data.date.toISOString()}>
+                        {new Date(post.data.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </time>
+                    </div>
+                    
+                    <p class="text-text-muted text-sm line-clamp-3">
+                      {post.data.description}
+                    </p>
+                    
+                    {post.data.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2 mt-4">
+                        {post.data.tags.map((tag: string) => (
+                          <span class="text-xs text-text-muted">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </section>
+        </>
+      )}
+      
+      <h2 class="text-3xl md:text-4xl font-bold text-text mb-4">
         Latest Posts
-      </h1>
+      </h2>
       <p class="text-lg text-text-muted mb-12">
         Thoughts on tech, life, and everything in between.
       </p>
       
-      <MasonryGrid posts={posts} />
+      <MasonryGrid posts={regularPosts.length > 0 ? regularPosts : allPosts} />
+      
+      <div class="flex justify-center mt-12 mb-8">
+        <a href="/posts" class="inline-flex items-center px-6 py-3 bg-surface hover:bg-surface-hover text-text rounded-lg transition-all duration-200 hover:transform hover:-translate-y-1 shadow-sm hover:shadow-md">
+          <span>View All Posts</span>
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
     </div>
     
     <Footer />
