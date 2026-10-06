@@ -1,97 +1,98 @@
 ---
 import { getCollection } from 'astro:content';
 
-interface Props {
-  query?: string;
-}
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 
-const { query = '' } = Astro.props;
-
-const allPosts = await getCollection('blog');
-
-const filteredPosts = query
-  ? allPosts.filter((post) => {
-      const lowerQuery = query.toLowerCase();
-      const titleMatch = post.data.title.toLowerCase().includes(lowerQuery);
-      const tagMatch = post.data.tags.some((tag) => 
-        tag.toLowerCase().includes(lowerQuery)
-      );
-      const categoryMatch = post.data.category.toLowerCase().includes(lowerQuery);
-      return titleMatch || tagMatch || categoryMatch;
-    })
-  : allPosts;
+const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
 ---
 
-<div id="search-container">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-    <div class="mb-8">
-      <input
-        type="text"
-        id="search-input"
-        placeholder="Search by title, tags, or category... (Press Ctrl/Cmd + K)"
-        value={query}
-        class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
-        autofocus
-      />
+<section class="search" aria-labelledby="search-label">
+  <form id="search-form" action="/search" role="search">
+    <label id="search-label" for="search-input">query</label>
+    <div class="search-controls">
+      <span class="accent" aria-hidden="true">$</span>
+      <input id="search-input" name="q" type="search" autocomplete="off" placeholder="title, description, tag, or category" />
+      <button class="button-link" type="submit">filter</button>
     </div>
+  </form>
 
-    <div id="search-results">
-      <div id="results-count" class="text-text-muted mb-6">
-        {query
-          ? `${filteredPosts.length} result${filteredPosts.length !== 1 ? 's' : ''} found for "${query}"`
-          : `Showing all ${allPosts.length} posts`
-        }
-      </div>
+  <p id="search-status" class="muted" aria-live="polite">Showing all {posts.length} posts.</p>
 
-      {filteredPosts.length > 0 ? (
-        <div class="space-y-4 min-h-[200px]">
-          {filteredPosts.map((post) => (
-            <article class="bg-surface rounded-lg p-6 hover:bg-surface-hover transition-colors duration-200 border-b border-border last:border-b-0">
-              <a href={`/blog/${post.slug}`} class="block">
-                <h3 class="text-xl font-bold text-text mb-2 hover:text-accent transition-colors duration-200">{post.data.title}</h3>
-                <p class="text-text-muted mb-3">{post.data.description}</p>
-                <div class="flex items-center justify-between text-sm text-text-muted">
-                  <span>{post.data.date.toLocaleDateString()}</span>
-                  <div class="flex gap-2">
-                    {post.data.tags.map((tag) => (
-                      <span class="px-2 py-1 bg-accent/10 text-accent rounded-full text-xs">{tag}</span>
-                    ))}
-                  </div>
-                </div>
-              </a>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-16">
-          <p class="text-text-muted text-lg">
-            No posts found matching your search.
-          </p>
-          <p class="text-text-muted text-sm mt-2">
-            Try different keywords or browse all posts.
-          </p>
-        </div>
-      )}
-    </div>
+  <div class="post-list" id="search-results">
+    {posts.map((post) => {
+      const searchText = [post.data.title, post.data.description, post.data.category, ...post.data.tags]
+        .join(' ')
+        .toLocaleLowerCase();
+      const slug = post.data.slug ?? post.slug;
+
+      return (
+        <article class="post-item" data-search-item data-search-text={searchText}>
+          <div class="post-meta">
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            <span>·</span>
+            <span>{post.data.category}</span>
+          </div>
+          <h2><a href={`/blog/${slug}`}>{post.data.title}</a></h2>
+          {post.data.description && <p class="muted">{post.data.description}</p>}
+          {post.data.tags.length > 0 && (
+            <div class="post-tags" aria-label="Tags">
+              {post.data.tags.map((tag) => <a class="tag" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>)}
+            </div>
+          )}
+        </article>
+      );
+    })}
   </div>
-</div>
+
+  <p id="search-empty" class="panel" hidden>No posts matched that query. Try a title, tag, category, or a different word.</p>
+</section>
 
 <script>
-  const searchInput = document.getElementById('search-input');
-  
-  if (searchInput) {
-    searchInput.focus();
-    
-    searchInput.addEventListener('input', (e) => {
-      const target = e.target as HTMLInputElement;
-      if (!target) return;
-      
-      const query = target.value;
-      
-      if (query.trim() === '') {
-        window.location.href = '/search';
-        return;
-      }
-    });
-  }
+  const form = document.querySelector<HTMLFormElement>('#search-form');
+  const input = document.querySelector<HTMLInputElement>('#search-input');
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-search-item]'));
+  const status = document.querySelector<HTMLElement>('#search-status');
+  const empty = document.querySelector<HTMLElement>('#search-empty');
+
+  const filterPosts = () => {
+    const query = input?.value.trim().toLocaleLowerCase() ?? '';
+    let matches = 0;
+
+    for (const item of items) {
+      const match = !query || item.dataset.searchText?.includes(query);
+      item.hidden = !match;
+      if (match) matches += 1;
+    }
+
+    if (status) {
+      status.textContent = query
+        ? `${matches} post${matches === 1 ? '' : 's'} matched “${query}”.`
+        : `Showing all ${items.length} posts.`;
+    }
+    if (empty) empty.hidden = matches !== 0;
+  };
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    filterPosts();
+    const url = new URL(window.location.href);
+    if (input?.value.trim()) url.searchParams.set('q', input.value.trim());
+    else url.searchParams.delete('q');
+    window.history.replaceState(null, '', url);
+  });
+  input?.addEventListener('input', filterPosts);
+  if (input) input.value = new URLSearchParams(window.location.search).get('q') ?? '';
+  filterPosts();
 </script>
+
+<style>
+  .search-controls { display: flex; gap: 0.75rem; align-items: center; }
+  .search input { min-width: 0; flex: 1; padding: 10px 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+</style>

@@ -1,102 +1,52 @@
-# Image Guide for MasterJ's LostLand
+# 图片使用指南
 
-## Where to Store Images
+图片不需要上传到外部图床。文章图片优先与文章 Markdown 放在一起，提交到仓库后会随 Astro 构建和 GitHub Pages 一起发布。
 
-### Option 1: Public Folder (Recommended for simplicity)
-Put your images in `public/images/` folder.
+## 推荐：文章专属图片
 
-**Structure:**
-```
-public/
+新文章通过 `npm run new-post -- <slug> [title]` 创建后，会有自己的图片目录：
+
+```text
+src/content/blog/<slug>/
+├── index.md
 └── images/
-    ├── neovim-demo.jpg
-    ├── rime-setup.png
-    └── stoicism-quote.jpg
+    └── setup.png
 ```
 
-**Access in posts:**
-- Thumbnail in frontmatter: `image: "/images/neovim-demo.jpg"`
-- Inline images in markdown: `![Image description](/images/neovim-demo.jpg)`
-
-### Option 2: Content Assets (For optimization)
-Create `src/content/blog/images/` folder.
-
-**Structure:**
-```
-src/content/blog/
-├── images/
-│   ├── neovim-demo.jpg
-│   └── rime-setup.png
-└── your-post.md
-```
-
-## How to Use Images
-
-### 1. Post Thumbnail (Card Image)
-In your markdown frontmatter:
-
-```yaml
----
-title: "My Post Title"
-image: "/images/your-image.jpg"
----
-```
-
-### 2. Inline Images in Content
-Standard markdown syntax:
+把图片直接复制到该文章的 `images/` 中，并在 `index.md` 里使用相对路径：
 
 ```markdown
-![Image description](/images/your-image.jpg)
+![配置界面](./images/setup.png)
 ```
 
-### 3. Resized Images (using Unsplash placeholders)
-For optimized images, use Unsplash with dimensions:
+这种方式让 Markdown 和它依赖的图片一起移动、一起删除，也避免不同文章的文件名冲突。
 
-```yaml
-image: "https://images.unsplash.com/photo-xxx?w=600&h=400&fit=crop"
+## 共用图片：`public/images/`
+
+只有在多篇文章或页面都要使用同一张图片时，才放到 `public/images/`：
+
+```text
+public/images/
+└── shared-diagram.png
 ```
 
-## Best Practices
-
-1. **Image Formats:**
-   - Use `.jpg` for photos
-   - Use `.png` for screenshots with text
-   - Use `.webp` for better compression (if supported)
-
-2. **Image Sizes:**
-   - Thumbnails: 600x400px (recommended)
-   - Inline images: Keep under 1MB each
-
-3. **File Naming:**
-   - Use lowercase: `my-image.jpg` (not `My-Image.jpg`)
-   - Use hyphens: `neovim-setup.jpg` (not spaces)
-
-## Example Post with Images
+在文章中用站点绝对路径引用：
 
 ```markdown
----
-title: "My Neovim Setup"
-description: "How I configure Neovim"
-date: 2026-02-07
-image: "/images/neovim-thumbnail.jpg"
-category: "Tech"
-tags: ["Neovim", "Linux"]
----
-
-Here's my Neovim setup:
-
-![My Neovim configuration](/images/neovim-config.png)
-
-## Installation
-
-The installation is simple:
-
-![Installation steps](/images/install.jpg)
+![共用示意图](/images/shared-diagram.png)
 ```
 
-## Recommended Workflow
+如果要把共用图片作为文章页顶部的封面，可在 frontmatter 中添加：
 
-1. Save images to `public/images/`
-2. Use `/images/filename.jpg` in posts
-3. Test locally with `npm run dev`
-4. Images will be deployed to GitHub Pages automatically
+```yaml
+image: "/images/shared-diagram.png"
+```
+
+文章不需要封面图，`image` 是可选字段。仓库中已有文章使用的旧封面链接会继续保留，无需为了这次重写迁移它们。
+封面目前使用 `/images/...` 这样的站点路径或完整 URL；文章目录里的照片直接放在 Markdown 正文中用相对路径引用。文章列表不依赖图片。
+
+## 建议
+
+- 照片通常使用 `.jpg` 或 `.webp`；文字较多的截图适合 `.png`。
+- 文件名使用小写英文、数字和连字符，例如 `terminal-search.png`。
+- 提交前确认图片只放在需要的位置：文章专属图片放文章目录，共用图片放 `public/images/`。

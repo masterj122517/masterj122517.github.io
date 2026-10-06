@@ -4,13 +4,23 @@ const blog = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    description: z.string(),
+    description: z.string().default(''),
     date: z.date(),
-    image: z.string(),
-    category: z.string(),
-    tags: z.array(z.string()),
+    slug: z.string().optional(),
+    image: z.string().optional(),
+    category: z.string().default('Notes'),
+    tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
   }),
 });
 
-export const collections = { blog };
+const pages = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().default(''),
+  }),
+});
+
+export const collections = { blog, pages };
+

@@ -1,66 +1,93 @@
 @import "tailwindcss";
 
-@theme {
-  --color-background: #1a1a1a;
-  --color-surface: #2a2a2a;
-  --color-surface-hover: #3a3a3a;
-  --color-text: #f0f0f0;
-  --color-text-muted: #a0a0a0;
-  --color-accent: #6366f1;
-  --color-border: #3a3a3a;
-  --font-sans: 'LXGW WenKai', 'Ubuntu', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Fira Code', 'Monaco', 'Consolas', monospace;
-}
+@font-face { font-family: 'Iosevka Custom'; src: url('/fonts/iosevka/regular.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Iosevka Custom'; src: url('/fonts/iosevka/semibold.woff2') format('woff2'); font-style: normal; font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Iosevka Custom'; src: url('/fonts/iosevka/bold.woff2') format('woff2'); font-style: normal; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Iosevka Custom'; src: url('/fonts/iosevka/italic.woff2') format('woff2'); font-style: italic; font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Iosevka Custom'; src: url('/fonts/iosevka/semibold-italic.woff2') format('woff2'); font-style: italic; font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Iosevka Custom'; src: url('/fonts/iosevka/bold-italic.woff2') format('woff2'); font-style: italic; font-weight: 700; font-display: swap; }
+@font-face { font-family: 'LXGW WenKai'; src: url('/fonts/wenkai/regular.woff2') format('woff2'); font-style: normal; font-weight: 100 500; font-display: swap; }
+@font-face { font-family: 'LXGW WenKai'; src: url('/fonts/wenkai/medium.woff2') format('woff2'); font-style: normal; font-weight: 600 900; font-display: swap; }
 
-* {
-  box-sizing: border-box;
+:root {
+  color-scheme: dark;
+  --bg: #0b100d;
+  --surface: #101812;
+  --text: #d6dfd5;
+  --muted: #96a494;
+  --accent: #b0ed85;
+  --border: #2b3b2b;
+  --mono: 'Iosevka Custom', 'LXGW WenKai', monospace;
 }
-
-body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  font-family: 'LXGW WenKai', 'Ubuntu', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  -moz-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, #00000016 3px, #00000016 4px); pointer-events: none; z-index: 5; }
+::selection { background: #b0ed8538; color: #efffe5; }
+a { color: var(--accent); text-underline-offset: 4px; }
+a:hover { color: #e1ffca; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+.skip-link { position: fixed; top: -100px; left: 20px; padding: 10px 20px; background: var(--surface); z-index: 10; }
+.skip-link:focus { top: 12px; }
+.muted { color: var(--muted); }
+.accent { color: var(--accent); }
+.eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .17em; font-size: 11px; margin: 0 0 20px; }
+.page-shell { width: min(100% - 48px, 960px); margin: 0 auto; padding: 54px 0 80px; }
+.page-heading { font-family: var(--mono); margin: 0 0 36px; font-size: 14px; line-height: 1.7; }
+.page-heading h1, .prose .page-heading h1 { font-size: clamp(28px, 5vw, 46px); font-weight: 600; line-height: 1.2; letter-spacing: -.05em; margin: 0 0 18px; color: var(--accent); }
+.page-heading p, .prose .page-heading p { margin: 0 0 18px; }
+.page-heading .eyebrow { font-size: 11px; }
+.panel { background: var(--surface); border: 1px solid var(--border); padding: 24px; }
+.site-header { width: min(100% - 48px, 1120px); margin: 0 auto; padding: 28px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.site-header a { text-decoration: none; }
+.site-nav { display: flex; gap: 22px; flex-wrap: wrap; font-size: 12px; }
+.site-nav a { color: var(--muted); }
+.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--accent); }
+.site-footer { width: min(100% - 48px, 1120px); margin: 0 auto; padding: 24px 0 32px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; display: flex; gap: 20px; justify-content: space-between; flex-wrap: wrap; }
+.site-footer a { text-decoration: none; }
+.post-list { padding: 0; margin: 32px 0; list-style: none; }
+.post-item { display: block; padding: 26px 0; border-bottom: 1px solid var(--border); }
+.post-item:first-child { border-top: 1px solid var(--border); }
+.post-item h2, .post-item h3 { margin: 8px 0; font-size: 21px; font-weight: 600; line-height: 1.4; }
+.post-item h2 a, .post-item h3 a { text-decoration: none; }
+.post-item p { margin: 8px 0; color: var(--muted); }
+.post-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+.tag { display: inline-block; font-size: 11px; padding: 3px 10px; border: 1px solid var(--border); text-decoration: none; color: var(--muted); margin: 4px 5px 4px 0; }
+.tag:hover { border-color: var(--accent); }
+.button-link { display: inline-block; padding: 10px 16px; border: 1px solid var(--border); text-decoration: none; }
+.button-link:hover { border-color: var(--accent); background: var(--surface); }
+.prose { max-width: 760px; font-family: var(--mono); font-size: 18px; line-height: 1.9; overflow-wrap: anywhere; }
+.prose h1, .prose h2, .prose h3, .prose h4 { font-family: var(--mono); font-weight: 600; line-height: 1.4; color: #e6eee2; margin: 2em 0 .8em; }
+.prose h1 { font-size: 2em; }
+.prose h2 { font-size: 1.5em; }
+.prose h3 { font-size: 1.2em; }
+.prose p, .prose ul, .prose ol { margin: 1.2em 0; }
+.prose ul { list-style: disc; padding-left: 1.5em; }
+.prose ol { list-style: decimal; padding-left: 1.5em; }
+.prose li { padding-left: .2em; margin: .4em 0; }
+.prose blockquote { margin: 1.6em 0; border-left: 2px solid var(--accent); padding: 1px 22px; color: var(--muted); background: var(--surface); }
+.prose img { display: block; height: auto; max-width: 100%; margin: 28px auto; border: 1px solid var(--border); }
+.prose pre { padding: 22px; border: 1px solid var(--border); overflow-x: auto; font-size: 13px; line-height: 1.7; margin: 28px 0; }
+.prose code { font-family: var(--mono); font-size: .86em; }
+.prose :not(pre) > code { background: #b0ed8510; color: var(--accent); padding: 3px 6px; }
+.prose hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.prose th, .prose td { border: 1px solid var(--border); padding: 10px 16px; text-align: left; }
+.prose strong { color: #eff5eb; }
+@media (max-width: 600px) {
+  .page-shell { width: calc(100% - 36px); padding: 36px 0 56px; }
+  .site-header, .site-footer { width: calc(100% - 36px); }
+  .site-header { gap: 18px; padding: 20px 0; }
+  .site-nav { gap: 16px; font-size: 11px; }
+  .prose { font-size: 17px; }
+  .prose pre { padding: 16px; }
 }
-
-/* Custom scrollbar for better aesthetics */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-surface);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-surface-hover);
-}
-
-/* Selection styling */
-::selection {
-  background-color: rgba(99, 102, 241, 0.3);
-  color: var(--color-text);
-}
-
-::-moz-selection {
-  background-color: rgba(99, 102, 241, 0.3);
-  color: var(--color-text);
-}
-
-/* Focus styles for accessibility */
-a:focus-visible,
-input:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media print {
+  body { background: white; color: black; }
+  body::before, .site-header, .site-footer, .skip-link { display: none; }
+  .prose, .prose strong, .prose h1, .prose h2, .prose h3, a, .page-heading { color: black; }
+  .page-shell { width: 100%; padding: 0; }
 }

@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.data.slug ?? post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const slug = post.data.slug ?? post.slug;
+const { Content } = await post.render();
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((candidate) => (candidate.data.slug ?? candidate.slug) !== slug)
+  .map((candidate) => ({
+    post: candidate,
+    sharedTags: candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length,
+  }))
+  .filter(({ sharedTags }) => sharedTags > 0)
+  .sort((left, right) => right.sharedTags - left.sharedTags || right.post.data.date.valueOf() - left.post.data.date.valueOf())
+  .slice(0, 3)
+  .map(({ post: candidate }) => candidate);
+const date = post.data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <Header />
+  <main class="page-shell">
+    <article class="prose">
+      <header class="page-heading">
+        <p class="eyebrow"><span class="accent">$</span> cat ~/posts/{slug}.md</p>
+        <h1>{post.data.title}</h1>
+        <div class="post-meta">
+          <time datetime={post.data.date.toISOString()}>{date}</time>
+          <span>·</span>
+          <span>{post.data.category}</span>
+        </div>
+        {post.data.description && <p class="muted">{post.data.description}</p>}
+        {post.data.tags.length > 0 && (
+          <div class="post-tags" aria-label="Tags">
+            {post.data.tags.map((tag) => <a class="tag" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>)}
+          </div>
+        )}
+      </header>
+      {post.data.image && <img src={post.data.image} alt={post.data.title} loading="eager" />}
+      <Content />
+    </article>
+
+    {relatedPosts.length > 0 && (
+      <aside class="panel related-posts" aria-labelledby="related-posts-title">
+        <h2 id="related-posts-title">Related posts</h2>
+        <div class="post-list">
+          {relatedPosts.map((relatedPost) => <PostCard post={relatedPost} />)}
+        </div>
+      </aside>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .post-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+  .related-posts { margin-top: 3rem; }
+</style>

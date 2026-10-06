@@ -1,50 +1,38 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const allPosts = await getCollection('blog');
-const allTags = allPosts.flatMap((post: any) => post.data.tags);
-const uniqueTags = allTags.filter((tag: string, index: number) => allTags.indexOf(tag) === index);
-
-const tagCounts: Record<string, number> = {};
-allPosts.forEach((post: any) => {
-  post.data.tags.forEach((tag: string) => {
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
-});
+const posts = await getCollection('blog');
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const tags = [...tagCounts.entries()].sort(([left], [right]) => left.localeCompare(right));
 ---
 
-<BaseLayout title="All Tags - MasterJ's LostLand">
-  <div class="pt-24 pb-12">
-    <Header />
-    
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-      <h1 class="text-4xl md:text-5xl font-bold text-text mb-4">
-        All Tags
-      </h1>
-      <p class="text-lg text-text-muted mb-12">
-        Explore posts by topics that interest you.
-      </p>
-      
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {uniqueTags.map((tag: any) => (
-          <a
-            href={`/tags/${tag}`}
-            class="block p-6 bg-surface rounded-lg hover:bg-surface-hover transition-all duration-200 hover:transform hover:-translate-y-1"
-          >
-            <span class="text-xl font-semibold text-text mb-2 block">
-              #{tag}
-            </span>
-            <span class="text-text-muted text-sm">
-              {tagCounts[tag]} post{tagCounts[tag] !== 1 ? 's' : ''}
-            </span>
-          </a>
+<BaseLayout title="Tags" description="Browse notes by topic.">
+  <Header />
+  <main class="page-shell">
+    <header class="page-heading">
+      <p class="eyebrow"><span class="accent">$</span> ls ~/tags</p>
+      <h1>Tags</h1>
+      <p class="muted">A compact index of recurring subjects.</p>
+    </header>
+    <section class="panel" aria-label="Tag index">
+      <div class="tag-list">
+        {tags.map(([tag, count]) => (
+          <a class="tag" href={`/tags/${encodeURIComponent(tag)}`}>#{tag} <span class="muted">({count})</span></a>
         ))}
       </div>
-    </div>
-    
-    <Footer />
-  </div>
+    </section>
+  </main>
+  <Footer />
 </BaseLayout>
+
+<style>
+  .tag-list { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+</style>

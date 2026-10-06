@@ -1,0 +1,25 @@
+---
+import { getEntry } from 'astro:content';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const page = await getEntry('pages', 'resume');
+if (!page) throw new Error('Missing resume page content.');
+const { Content } = await page.render();
+---
+
+<BaseLayout title={page.data.title} description={page.data.description}>
+  <Header />
+  <main class="page-shell">
+    <article class="prose">
+      <header class="page-heading">
+        <p class="eyebrow"><span class="accent">$</span> cat ~/resume.md</p>
+        <h1>{page.data.title}</h1>
+        {page.data.description && <p class="muted">{page.data.description}</p>}
+      </header>
+      <Content />
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
