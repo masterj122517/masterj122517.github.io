@@ -104,5 +104,6 @@ scripts/new-post.mjs           新建文章命令
 网站地址：**https://masterj122517.github.io/**
 
 本地 `npm run build` 只生成静态文件，不会部署。提交并推送到 `main` 后，`.github/workflows/deploy.yml` 会使用 Node 22、通过 `npm ci` 安装锁定依赖、配置 Pages、构建 Astro、检查 TypeScript，并发布到 GitHub Pages。构建或检查失败时不会发布。
+官方 Actions 使用支持 Node 24 运行时的版本；这是 Actions 自身的运行环境，与站点构建使用的 Node 22 分开。
 
 GitHub 仓库的 **Settings → Pages → Build and deployment → Source** 使用 **GitHub Actions**；工作流通过 `GITHUB_TOKEN` 和 OIDC 部署，不需要手动添加部署密钥。也可以在 Actions 页面手动触发 **Deploy to GitHub Pages**。查看对应运行的 `deploy` 作业确认发布结果。
